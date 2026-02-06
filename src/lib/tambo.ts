@@ -14,6 +14,7 @@ import {
   getCountryPopulations,
   getGlobalPopulationTrend,
 } from "@/services/population-stats";
+import { getQuestions, getRandomQuestion } from "@/services/question-service";
 import type { TamboComponent } from "@tambo-ai/react";
 import { TamboTool } from "@tambo-ai/react";
 import { z } from "zod";
@@ -72,6 +73,46 @@ export const tools: TamboTool[] = [
         growthRate: z.number(),
       }),
     ),
+  },
+  {
+    name: "getExamQuestions",
+    description:
+      "A tool to get exam preparation questions by subject and optionally by chapter. Use this when students ask for practice questions or want to study specific topics.",
+    tool: getQuestions,
+    inputSchema: z.object({
+      subject: z.string().describe("The subject name (e.g., 'physics', 'chemistry', 'biology', 'mathematics')"),
+      chapter: z.string().optional().describe("Optional chapter name to filter questions"),
+    }),
+    outputSchema: z.array(
+      z.object({
+        id: z.string(),
+        subject: z.string(),
+        chapter: z.string().optional(),
+        question: z.string(),
+        answer: z.string(),
+        explanation: z.string().optional(),
+        type: z.enum(["theory", "mcq"]),
+      }),
+    ),
+  },
+  {
+    name: "getRandomQuestion",
+    description:
+      "A tool to get a random practice question from a subject or chapter. Use this when students want a quick practice question.",
+    tool: getRandomQuestion,
+    inputSchema: z.object({
+      subject: z.string().describe("The subject name (e.g., 'physics', 'chemistry', 'biology', 'mathematics')"),
+      chapter: z.string().optional().describe("Optional chapter name to filter questions"),
+    }),
+    outputSchema: z.object({
+      id: z.string(),
+      subject: z.string(),
+      chapter: z.string().optional(),
+      question: z.string(),
+      answer: z.string(),
+      explanation: z.string().optional(),
+      type: z.enum(["theory", "mcq"]),
+    }).nullable(),
   },
   // Add more tools here
 ];

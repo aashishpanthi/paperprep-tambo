@@ -44,6 +44,9 @@ const config: Config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        "support-teal": "var(--support-teal)",
+        "support-yellow": "var(--support-yellow)",
+        "support-lavender": "var(--support-lavender)",
       },
       borderRadius: {
         lg: "var(--radius)",
