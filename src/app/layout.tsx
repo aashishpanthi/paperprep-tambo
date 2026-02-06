@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   description: "Transform your exam preparation from static PDFs into interactive learning experiences. Practice with MCQs, flashcards, fill-in-the-blanks, and AI-powered chat tutoring for students in Nepal.",
   keywords: ["exam preparation", "Nepal", "MCQ practice", "flashcards", "AI tutoring", "interactive learning", "education"],
   authors: [{ name: "PaperPrep" }],
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
   openGraph: {
     title: "PaperPrep - Interactive Exam Preparation Platform",
     description: "Transform your exam preparation from static PDFs into interactive learning experiences. Practice with MCQs, flashcards, fill-in-the-blanks, and AI-powered chat tutoring.",
