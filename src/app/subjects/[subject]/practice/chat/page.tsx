@@ -2,8 +2,6 @@
 
 import { notFound } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PracticeHeader } from "@/components/practice/PracticeHeader";
 import { ChatContainer } from "@/components/chat/ChatContainer";
@@ -42,9 +40,7 @@ export default function ChatPracticePage({
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 flex flex-col">
+    <main className="flex-1 flex flex-col">
         <PageContainer maxWidth="full" className="flex-1 flex flex-col py-8 sm:py-12">
           <PracticeHeader subject={subjectId} mode="chat" />
           <div className="mb-4 p-4 bg-muted rounded-lg">
@@ -66,8 +62,6 @@ export default function ChatPracticePage({
             </TamboProvider>
           </div>
         </PageContainer>
-      </main>
-      <Footer />
-    </div>
+    </main>
   );
 }

@@ -212,6 +212,34 @@ export const subjects = [
     chapters: ["Algebra", "Geometry", "Trigonometry", "Calculus"],
     questionCount: 5,
   },
+  {
+    id: "visual-programming",
+    name: "Visual Programming",
+    description: "Programming using visual elements and drag-and-drop interfaces",
+    chapters: ["Block Programming", "Flowcharts", "UI Design", "Event Handling"],
+    questionCount: 0,
+  },
+  {
+    id: "operating-system",
+    name: "Operating System",
+    description: "System software that manages computer hardware and software resources",
+    chapters: ["Process Management", "Memory Management", "File Systems", "Scheduling"],
+    questionCount: 0,
+  },
+  {
+    id: "computer-network",
+    name: "Computer Network",
+    description: "Study of interconnected computing devices and data communication",
+    chapters: ["Network Topologies", "Protocols", "OSI Model", "Network Security"],
+    questionCount: 0,
+  },
+  {
+    id: "english",
+    name: "English",
+    description: "Study of English language, literature, and communication",
+    chapters: ["Grammar", "Vocabulary", "Comprehension", "Writing Skills"],
+    questionCount: 0,
+  },
 ];
 
 export function getQuestionsBySubject(subject: string): Question[] {

@@ -1,24 +1,24 @@
 import Link from "next/link";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { subjects } from "@/data/questions";
-import { BookOpen, Calculator, Atom, FlaskConical, ArrowRight } from "lucide-react";
+import { BookOpen, Calculator, Atom, FlaskConical, ArrowRight, Code, HardDrive, Network, Languages } from "lucide-react";
 
 const subjectIcons = {
   physics: Atom,
   chemistry: FlaskConical,
   biology: BookOpen,
   mathematics: Calculator,
+  "visual-programming": Code,
+  "operating-system": HardDrive,
+  "computer-network": Network,
+  english: Languages,
 };
 
 export default function SubjectsPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
-      <main className="flex-1">
+    <main className="flex-1">
         {/* Header Section - White Background */}
         <section className="bg-background py-12 sm:py-16">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -138,8 +138,6 @@ export default function SubjectsPage() {
             </div>
           </div>
         </section>
-      </main>
-      <Footer />
-    </div>
+    </main>
   );
 }

@@ -2,8 +2,6 @@
 
 import { notFound, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { PracticeHeader } from "@/components/practice/PracticeHeader";
 import { ProgressIndicator } from "@/components/practice/ProgressIndicator";
@@ -74,9 +72,7 @@ export default function FillBlanksPracticePage({
   const isFirstQuestion = currentIndex === 0;
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 py-8 sm:py-12">
+    <main className="flex-1 py-8 sm:py-12">
         <PageContainer maxWidth="2xl">
           <PracticeHeader subject={subjectId} mode="fill-blanks" />
           
@@ -134,8 +130,6 @@ export default function FillBlanksPracticePage({
             </div>
           </div>
         </PageContainer>
-      </main>
-      <Footer />
-    </div>
+    </main>
   );
 }

@@ -1,7 +1,5 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { subjects } from "@/data/questions";
@@ -56,9 +54,7 @@ export default async function PracticeModeSelector({
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
-      <main className="flex-1">
+    <main className="flex-1">
         {/* Header Section */}
         <section className="bg-support-teal py-12 sm:py-16">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -174,8 +170,6 @@ export default async function PracticeModeSelector({
             </div>
           </div>
         </section>
-      </main>
-      <Footer />
-    </div>
+    </main>
   );
 }
