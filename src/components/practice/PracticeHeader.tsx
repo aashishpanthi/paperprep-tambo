@@ -23,7 +23,7 @@ export function PracticeHeader({ subject, mode, onBack }: PracticeHeaderProps) {
             <ArrowLeft className="h-4 w-4" />
           </Button>
         ) : (
-          <Link href={`/subjects/${subject}`}>
+          <Link href={`/${subject}`}>
             <Button variant="ghost" size="icon">
               <ArrowLeft className="h-4 w-4" />
             </Button>

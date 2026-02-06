@@ -41,7 +41,7 @@ export function SubjectNetwork() {
   const pathRef = useRef<SVGPathElement>(null);
   const carRef = useRef<SVGPathElement>(null);
   const cardRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  const [subjectPositions, setSubjectPositions] = useState<{ [key: string]: { x: number; y: number; angle: number } }>({});
+  const [subjectPositions, setSubjectPositions] = useState<{ [key: string]: { x: number; y: number; angle: number; pathLength: number } }>({});
   const currentProgressRef = useRef<number>(0);
 
   // Define subjects with their progress along the path
@@ -51,49 +51,42 @@ export function SubjectNetwork() {
       name: "Physics",
       description: "Study of matter, motion, and energy",
       icon: Atom,
-      progress: 0.1,
-    },
-    {
-      id: "chemistry",
-      name: "Chemistry",
-      description: "Study of matter and its transformations",
-      icon: FlaskConical,
-      progress: 0.25,
+      progress: 0.01,
     },
     {
       id: "visual-programming",
       name: "Visual Programming",
       description: "Programming with visual elements",
       icon: Code,
-      progress: 0.4,
+      progress: 0.2,
+    },
+    {
+      id: "chemistry",
+      name: "Chemistry",
+      description: "Study of matter and its transformations",
+      icon: FlaskConical,
+      progress: 0.44,
     },
     {
       id: "operating-system",
       name: "Operating System",
       description: "System software management",
       icon: HardDrive,
-      progress: 0.55,
-    },
-    {
-      id: "biology",
-      name: "Biology",
-      description: "Study of living organisms",
-      icon: BookOpen,
-      progress: 0.7,
-    },
-    {
-      id: "computer-network",
-      name: "Computer Network",
-      description: "Interconnected computing devices",
-      icon: Network,
-      progress: 0.8,
+      progress: 0.63,
     },
     {
       id: "mathematics",
       name: "Mathematics",
       description: "Study of numbers and patterns",
       icon: Calculator,
-      progress: 0.9,
+      progress: 0.78,
+    },
+    {
+      id: "biology",
+      name: "Biology",
+      description: "Study of living organisms",
+      icon: BookOpen,
+      progress: 1,
     },
   ];
 
@@ -109,17 +102,19 @@ export function SubjectNetwork() {
 
     const path = pathRef.current;
     const pathLength = path.getTotalLength();
-    const positions: { [key: string]: { x: number; y: number; angle: number } } = {};
+    const positions: { [key: string]: { x: number; y: number; angle: number; pathLength: number } } = {};
 
     nodes.forEach((node) => {
-      const point = path.getPointAtLength(pathLength * node.progress);
-      const pointBefore = path.getPointAtLength(Math.max(0, pathLength * node.progress - 1));
+      const subjectPathLength = pathLength * node.progress;
+      const point = path.getPointAtLength(subjectPathLength);
+      const pointBefore = path.getPointAtLength(Math.max(0, subjectPathLength - 1));
       const angle = Math.atan2(point.y - pointBefore.y, point.x - pointBefore.x) * (180 / Math.PI);
       
       positions[node.id] = {
         x: point.x,
         y: point.y,
         angle: angle,
+        pathLength: subjectPathLength, // Store the actual path length for this subject
       };
     });
 
@@ -167,15 +162,30 @@ export function SubjectNetwork() {
             const progress = tl.progress();
             currentProgressRef.current = progress;
             
-            // Find the closest subject to the car's current position
+            if (!pathRef.current) return;
+            
+            // Calculate car's actual position along the path
+            const pathLength = pathRef.current.getTotalLength();
+            const carPathLength = pathLength * progress;
+            const carPoint = pathRef.current.getPointAtLength(carPathLength);
+            
+            // Find the closest subject to the car's current visual position (x,y coordinates)
             let closestNode: SubjectNode | null = null;
             let minDistance = Infinity;
-            const threshold = 0.025; // Highlight when within 2.5% of the subject's position
+            const threshold = 30; // Highlight when within 30 pixels visually
 
             for (const node of nodes) {
-              const distance = Math.abs(progress - node.progress);
-              if (distance < minDistance && distance < threshold) {
-                minDistance = distance;
+              const subjectPosition = subjectPositions[node.id];
+              if (!subjectPosition) continue;
+              
+              // Calculate visual distance using x,y coordinates
+              const dx = carPoint.x - subjectPosition.x;
+              const dy = carPoint.y - subjectPosition.y;
+              const visualDistance = Math.sqrt(dx * dx + dy * dy);
+              
+              // Highlight when car is visually close to the subject
+              if (visualDistance < minDistance && visualDistance < threshold) {
+                minDistance = visualDistance;
                 closestNode = node;
               }
             }
@@ -196,7 +206,7 @@ export function SubjectNetwork() {
                 setHighlightedSubject(closestNode.id);
                 const el = cardRefs.current[closestNode.id];
                 if (el && hoveredSubject !== closestNode.id) {
-                  gsap.to(el, { scale: 1.2, duration: 0.3, ease: "elastic.out(1, 0.5)" });
+                  gsap.to(el, { scale: 1.05, duration: 0.3, ease: "elastic.out(1, 0.5)" });
                 }
               }
             } else {
@@ -236,8 +246,8 @@ export function SubjectNetwork() {
           return (
             <Link
               key={node.id}
-              href={`/subjects/${node.id}`}
-              className="absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer z-10"
+              href={`/${node.id}`}
+              className="absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer z-10"
               style={{
                 left: `${(position.x / 462) * 100}%`,
                 top: `${(position.y / 844) * 100}%`,
@@ -246,7 +256,7 @@ export function SubjectNetwork() {
                 setHoveredSubject(node.id);
                 const el = cardRefs.current[node.id];
                 if (el && !isHighlighted) {
-                  gsap.to(el, { scale: 1.2, duration: 0.3, ease: "elastic.out(1, 0.5)" });
+                  gsap.to(el, { scale: 1.1, duration: 0.3, ease: "elastic.out(1, 0.5)" });
                 }
               }}
               onMouseLeave={() => {
@@ -262,27 +272,27 @@ export function SubjectNetwork() {
                   cardRefs.current[node.id] = el;
                 }}
                 className={cn(
-                  "w-[72px] h-[72px] rounded-full border-2 flex items-center justify-center p-2 transition-all duration-200",
+                  "w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-3xl border-2 flex flex-col items-center justify-center p-4 md:p-5 transition-all duration-200 shadow-md",
                   isHovered || isHighlighted
-                    ? "bg-primary border-primary shadow-lg"
-                    : "bg-white border-muted-foreground/30 hover:border-primary/50"
+                    ? "bg-primary border-primary shadow-xl"
+                    : "bg-white border-muted-foreground/30 hover:border-primary/50 hover:shadow-lg"
                 )}
               >
                 <Icon
                   className={cn(
-                    "w-[36px] h-[36px] transition-colors duration-200",
-                    isHovered || isHighlighted ? "text-white" : "text-foreground"
+                    "w-[48px] h-[48px] md:w-[56px] md:h-[56px] mb-2 md:mb-3 transition-colors duration-200",
+                    isHovered || isHighlighted ? "text-white" : "text-primary"
                   )}
                 />
+                <h3
+                  className={cn(
+                    "text-sm md:text-base font-semibold text-center leading-tight transition-colors duration-200",
+                    isHovered || isHighlighted ? "text-white" : "text-foreground"
+                  )}
+                >
+                  {node.name}
+                </h3>
               </div>
-              <h3
-                className={cn(
-                  "text-[18px] md:text-[20px] leading-[28px] md:leading-[30px] font-normal mt-3 text-center whitespace-nowrap",
-                  isHovered || isHighlighted ? "text-primary" : "text-foreground"
-                )}
-              >
-                {node.name}
-              </h3>
             </Link>
           );
         })}

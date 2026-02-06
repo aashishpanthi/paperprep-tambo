@@ -111,7 +111,7 @@ export default function FillBlanksPracticePage({
                     Practice Complete! Final Score: {score} / {fillBlankQuestions.length}
                   </p>
                   <div className="flex gap-4 justify-center flex-wrap">
-                    <Button onClick={() => router.push(`/subjects/${subjectId}/practice`)}>
+                    <Button onClick={() => router.push(`/${subjectId}/practice`)}>
                       Try Another Mode
                     </Button>
                     <Button
